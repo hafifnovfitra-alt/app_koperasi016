@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('simpanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('anggota_id')->constrained('anggota')->onDelete('cascade');
+            $table->foreignId('anggota_id')->constrained('anggotas')->onDelete('cascade');
             $table->date('tanggal_simpan');
             $table->integer('jumlah_simpanan');
             $table->enum('jenis_simpanan',['pokok','wajib','sukarela']);

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('angsurans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pinjaman_id')->constrained('pinjamans')->onDelete('cascade');
+            $table->foreignId('pinjaman_id')->constrained('pinjaman')->onDelete('cascade');
             $table->date('tanggal_bayar');
             $table->integer('jumlah_bayar');
-            $table->integer('anggsuran_ke');
+            $table->integer('angsuran_ke');
             $table->timestamps();
         });
     }

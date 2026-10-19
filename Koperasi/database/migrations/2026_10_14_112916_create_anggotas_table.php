@@ -10,15 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('anggotas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->string('alamat')->nullable();
-            $table->string('no_hp')->nullable();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('anggotas', function (Blueprint $table) {
+        $table->id();
+        $table->string('nik', 16)->unique();
+        $table->string('nama');
+        $table->text('alamat');
+        $table->string('no_telepon', 15);
+        $table->string('email')->nullable()->unique();
+        $table->date('tanggal_bergabung');
+        $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
