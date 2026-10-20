@@ -8,13 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, string ...$roles): Response
-    {
-        $user = $request->user();
-
-        abort_unless($user && $user->is_active, 403);
-        abort_unless(in_array($user->role, $roles, true), 403);
-
-        return $next($request);
+    public function handle(Request $request, Closure $next, ...$roles)
+{
+    if (! $request->user() || ! in_array($request->user()->role, $roles)) {
+        abort(403, 'Anda tidak memiliki hak akses ke halaman ini.');
     }
+
+    return $next($request);
+}
 }

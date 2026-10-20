@@ -5,6 +5,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SimpananController;
 use App\Http\Controllers\PinjamanController;
+use App\Http\Controllers\AngsuranController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -30,7 +32,9 @@ Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
 // Admin dan Bendahara
 Route::middleware(['auth', 'role:admin,bendahara'])->group(function () {
     Route::resource('simpanan', SimpananController::class);
+    Route::resource('angsuran', AngsuranController::class);
 });
+
 
 // Admin, Pengurus, dan Bendahara
 Route::middleware(['auth', 'role:admin,pengurus,bendahara'])->group(function () {

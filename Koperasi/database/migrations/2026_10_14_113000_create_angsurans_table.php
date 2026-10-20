@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('angsurans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pinjaman_id')->constrained('pinjaman')->onDelete('cascade');
-            $table->date('tanggal_bayar');
-            $table->integer('jumlah_bayar');
-            $table->integer('angsuran_ke');
-            $table->timestamps();
-        });
+        Schema::create('angsuran', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('pinjaman_id')->constrained('pinjaman')->cascadeOnDelete();
+    $table->integer('angsuran_ke');
+    $table->date('jatuh_tempo')->nullable();
+    $table->decimal('jumlah_tagihan', 15, 2); // Presisi nominal rupiah sesuai modul
+    $table->decimal('jumlah_bayar', 15, 2);   // Presisi nominal rupiah sesuai modul
+    $table->date('tanggal_bayar');
+    $table->string('status', 30)->default('lunas');
+    $table->timestamps();
+});
     }
 
     /**

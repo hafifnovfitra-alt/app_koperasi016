@@ -68,51 +68,70 @@
         </div>
     </div>
 
-    <!-- Akses Cepat / Pintasan Fitur -->
-    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-grid-fill text-primary me-2"></i>Pintasan Modul</h5>
-    <div class="row g-3">
-        <div class="col-md-4">
-            <a href="{{ route('anggota.index') }}" class="text-decoration-none">
-                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-people fs-2 text-primary me-3"></i>
-                            <h6 class="fw-bold text-dark mb-0">Kelola Anggota</h6>
+    <!-- Akses Cepat / Pintasan Fitur Sesuai Role -->
+    @if(auth()->user()->role !== 'anggota')
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-grid-fill text-primary me-2"></i>Pintasan Modul</h5>
+        <div class="row g-3">
+            
+            {{-- Hanya Admin & Pengurus --}}
+            @if(in_array(auth()->user()->role, ['admin', 'pengurus']))
+                <div class="col-md-4">
+                    <a href="{{ route('anggota.index') }}" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-people fs-2 text-primary me-3"></i>
+                                    <h6 class="fw-bold text-dark mb-0">Kelola Anggota</h6>
+                                </div>
+                                <p class="text-muted small mb-0">Lihat, tambah, dan sunting data anggota koperasi.</p>
+                            </div>
                         </div>
-                        <p class="text-muted small mb-0">Lihat, tambah, dan sunting data anggota koperasi.</p>
-                    </div>
+                    </a>
                 </div>
-            </a>
-        </div>
+            @endif
 
-        <div class="col-md-4">
-            <a href="{{ route('simpanan.index') }}" class="text-decoration-none">
-                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-wallet2 fs-2 text-success me-3"></i>
-                            <h6 class="fw-bold text-dark mb-0">Kelola Simpanan</h6>
+            {{-- Hanya Admin & Bendahara --}}
+            @if(in_array(auth()->user()->role, ['admin', 'bendahara']))
+                <div class="col-md-4">
+                    <a href="{{ route('simpanan.index') }}" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-wallet2 fs-2 text-success me-3"></i>
+                                    <h6 class="fw-bold text-dark mb-0">Kelola Simpanan</h6>
+                                </div>
+                                <p class="text-muted small mb-0">Catat transaksi simpanan pokok, wajib, dan sukarela.</p>
+                            </div>
                         </div>
-                        <p class="text-muted small mb-0">Catat transaksi simpanan pokok, wajib, dan sukarela.</p>
-                    </div>
+                    </a>
                 </div>
-            </a>
-        </div>
+            @endif
 
-        <div class="col-md-4">
-            <a href="{{ route('pinjaman.index') }}" class="text-decoration-none">
-                <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="bi bi-cash-coin fs-2 text-warning me-3"></i>
-                            <h6 class="fw-bold text-dark mb-0">Kelola Pinjaman</h6>
+            {{-- Admin, Pengurus, & Bendahara --}}
+            @if(in_array(auth()->user()->role, ['admin', 'pengurus', 'bendahara']))
+                <div class="col-md-4">
+                    <a href="{{ route('pinjaman.index') }}" class="text-decoration-none">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 card-hover">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-cash-coin fs-2 text-warning me-3"></i>
+                                    <h6 class="fw-bold text-dark mb-0">Kelola Pinjaman</h6>
+                                </div>
+                                <p class="text-muted small mb-0">Pengajuan, persetujuan tenor, dan kalkulasi bunga.</p>
+                            </div>
                         </div>
-                        <p class="text-muted small mb-0">Pengajuan, persetujuan tenor, dan kalkulasi bunga.</p>
-                    </div>
+                    </a>
                 </div>
-            </a>
+            @endif
+
         </div>
-    </div>
+    @else
+        {{-- Tampilan Khusus Jika yang Login adalah Anggota --}}
+        <div class="alert alert-info border-0 shadow-sm rounded-4 p-4 mt-2">
+            <h5 class="fw-bold text-dark"><i class="bi bi-info-circle-fill text-info me-2"></i>Informasi Keanggotaan</h5>
+            <p class="mb-0 text-dark">Selamat datang di KoperasiKu. Saat ini Anda masuk sebagai <strong>Anggota</strong>. Segala bentuk proses pencatatan data simpanan dan pengajuan pinjaman dikelola secara langsung oleh pihak Pengurus dan Bendahara koperasi.</p>
+        </div>
+    @endif
 </div>
 
 <style>

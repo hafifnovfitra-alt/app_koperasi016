@@ -40,21 +40,38 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
+                
+                <!-- MENU KIRI (Teks Link Navbar Sesuai Role) -->
                 <ul class="navbar-nav me-auto">
                     @auth
                         <li class="nav-item">
                             <a class="nav-link text-white fw-semibold" href="{{ route('dashboard') }}">Dashboard</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" href="{{ route('anggota.index') }}">Data Anggota</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" href="{{ route('simpanan.index') }}">Data Simpanan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white fw-semibold" href="{{ route('pinjaman.index') }}">Data Pinjaman</a>
-                        </li>
+
+                        @if(in_array(auth()->user()->role, ['admin', 'pengurus']))
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{{ route('anggota.index') }}">Data Anggota</a>
+                            </li>
+                        @endif
+
+                        @if(in_array(auth()->user()->role, ['admin', 'bendahara']))
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{{ route('simpanan.index') }}">Data Simpanan</a>
+                            </li>
+                        @endif
+
+                        @if(in_array(auth()->user()->role, ['admin', 'pengurus', 'bendahara']))
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{{ route('pinjaman.index') }}">Data Pinjaman</a>
+                            </li>
+                        @endif
+                        @if(in_array(auth()->user()->role, ['admin', 'bendahara']))
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{{ route('angsuran.index') }}">Data Angsuran</a>
+                            </li>
+                        @endif
                         @if(auth()->user()->role === 'admin')
                             <li class="nav-item">
                                 <a class="nav-link text-white fw-semibold" href="{{ route('users.index') }}">Kelola User</a>
@@ -62,34 +79,53 @@
                         @endif
                     @endauth
                 </ul>
+
+                <!-- MENU KANAN (Nama User, Profil & Form Logout) -->
                 <ul class="navbar-nav ms-auto">
                     @auth
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle me-1"></i>{{ Auth::user()->name }}
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
-                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger">Log Out</button>
-                                    </form>
-                                </li>
-                            </ul>
+
+                            <div class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2">
+                                <a class="dropdown-item py-2" href="{{ route('profile.edit') }}">
+                                    <i class="bi bi-person me-2 text-muted"></i> Profil Saya
+                                </a>
+                                
+                                <div class="dropdown-divider"></div>
+                                
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item py-2 text-danger fw-semibold">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Keluar (Logout)
+                                    </button>
+                                </form>
+                            </div>
                         </li>
+                    @else
+                        <!-- Tampil Jika Belum Login -->
+                        <li class="nav-item">
+                            <a class="nav-link text-white fw-semibold" href="{{ route('login') }}">Masuk</a>
+                        </li>
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link text-white fw-semibold" href="{{ route('register') }}">Daftar</a>
+                            </li>
+                        @endif
                     @endauth
                 </ul>
+
             </div>
         </div>
     </nav>
 
+    <!-- KONTEN UTAMA HALAMAN (Dashboard, Form, Tabel, dll) MASUK KE SINI -->
     <main>
         @yield('content')
     </main>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS (Wajib ada agar dropdown & tombol menu HP bisa diklik) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
