@@ -56,6 +56,7 @@
                                 <select name="status" class="form-select @error('status') is-invalid @enderror" required>
                                     <option value="pengajuan" {{ old('status', $pinjaman->status) === 'pengajuan' ? 'selected' : '' }}>Pengajuan</option>
                                     <option value="disetujui" {{ old('status', $pinjaman->status) === 'disetujui' ? 'selected' : '' }}>Disetujui</option>
+                                    <option value="cair" {{ old('status', $pinjaman->status) === 'cair' ? 'selected' : '' }}>Cair / Dicairkan</option>
                                     <option value="ditolak" {{ old('status', $pinjaman->status) === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                                     <option value="lunas" {{ old('status', $pinjaman->status) === 'lunas' ? 'selected' : '' }}>Lunas</option>
                                 </select>

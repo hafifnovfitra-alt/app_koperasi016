@@ -55,29 +55,30 @@ class PinjamanController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $pinjaman = Pinjaman::findOrFail($id);
+{
+    $pinjaman = Pinjaman::findOrFail($id);
 
-        $data = Validator::make($request->all(), [
-            'anggota_id' => 'required|exists:anggotas,id',
-            'jumlah_pengajuan' => 'required|numeric|min:100000',
-            'jumlah_disetujui' => 'nullable|numeric|min:0',
-            'bunga_persen' => 'required|numeric|min:0|max:100',
-            'tenor_bulan' => 'required|integer|min:1|max:120',
-            'status' => 'required|in:pengajuan,disetujui,ditolak,lunas',
-        ])->validate();
+    $data = Validator::make($request->all(), [
+        'anggota_id'       => 'required|exists:anggotas,id',
+        'jumlah_pengajuan' => 'required|numeric|min:100000',
+        'jumlah_disetujui' => 'nullable|numeric|min:0',
+        'bunga_persen'     => 'required|numeric|min:0|max:100',
+        'tenor_bulan'      => 'required|integer|min:1|max:120',
+        'status'           => 'required|in:pengajuan,disetujui,cair,ditolak,lunas',
+    ])->validate();
 
-        if (in_array($data['status'], ['disetujui', 'ditolak'])) {
-            $data['approved_by'] = auth()->id();
-            if ($data['status'] === 'disetujui' && empty($data['jumlah_disetujui'])) {
-                $data['jumlah_disetujui'] = $data['jumlah_pengajuan'];
-            }
+    if (in_array($data['status'], ['disetujui', 'cair', 'ditolak'])) {
+        $data['approved_by'] = auth()->id();
+        
+        if (in_array($data['status'], ['disetujui', 'cair']) && empty($data['jumlah_disetujui'])) {
+            $data['jumlah_disetujui'] = $data['jumlah_pengajuan'];
         }
-
-        $pinjaman->update($data);
-
-        return redirect()->route('pinjaman.index')->with('success', 'Data pinjaman berhasil diperbarui.');
     }
+
+    $pinjaman->update($data);
+
+    return redirect()->route('pinjaman.index')->with('success', 'Data pinjaman berhasil diperbarui.');
+}
 
     public function destroy($id)
     {
